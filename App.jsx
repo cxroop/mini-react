@@ -1,4 +1,6 @@
-import React from './core/React.js';
+// js pragma
+/**@jsx CReact.createElement */
+import CReact from './core/React.js';
 
 // const App = React.createElement('div', { id: 'app' }, 'hello', ' there');
 const App = <div>hello there</div>;

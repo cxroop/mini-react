@@ -4,4 +4,4 @@ import App from './App.jsx';
 
 console.log(App, <App />);
 
-ReactDom.createRoot(document.querySelector('#root')).render(<App />);
+ReactDom.createRoot(document.querySelector('#root')).render(App);
