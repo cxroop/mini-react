@@ -22,6 +22,7 @@ function createElement(type, props, ...children) {
 }
 
 function render(el, container) {
+  console.log(el);
   nextWorkUnit = {
     dom: container,
     props: {
@@ -33,6 +34,7 @@ function render(el, container) {
 let nextWorkUnit = null;
 function workLoop(deadline) {
   let shouldYield = false;
+  // console.log(shouldYield, nextWorkUnit);
   while (!shouldYield && nextWorkUnit) {
     // run task
     nextWorkUnit = processWorkUnit(nextWorkUnit);
@@ -56,6 +58,7 @@ function updateProps(dom, props) {
 }
 
 function createLinked(fiber) {
+  console.log('props', fiber.props);
   const children = fiber.props.children;
   let prevChild = null;
   children.forEach((child, idx) => {
@@ -74,6 +77,7 @@ function createLinked(fiber) {
     }
     prevChild = nextFiber;
   });
+  console.log('child', fiber.child);
 }
 
 function processWorkUnit(fiber) {
@@ -90,20 +94,24 @@ function processWorkUnit(fiber) {
   // 3.2 找sibling
   // 3.3 找uncle
   createLinked(fiber);
-  console.log('fiber', fiber);
+  // console.log('fiber', fiber);
   // 4. 返回下一个需要处理的任务
-  if (fiber.child) {
-    // 找孩子
-    return fiber.child;
-  }
+  fiber.next = (deep = false) => {
+    if (!deep && fiber.child) {
+      // 找孩子
+      return fiber.child;
+    }
 
-  if (fiber.sibling) {
-    // 找兄弟
-    return fiber.sibling;
-  }
+    if (fiber.sibling) {
+      // 找兄弟
+      return fiber.sibling;
+    }
 
-  // 找叔叔
-  return fiber.parent?.sibling;
+    // 找叔叔（一直往上找）
+    console.log('parent', fiber.parent);
+    return fiber.parent?.sibling || fiber.parent?.next(true);
+  }
+  return fiber.next()
 }
 
 requestIdleCallback(workLoop);
