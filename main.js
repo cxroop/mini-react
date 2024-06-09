@@ -1,80 +1,41 @@
-// const textEl = {
-//   type: 'TEXT_ELEMENt',
+// const textEL = {
+//   type: 'TEXT_ELEMENT',
 //   props: {
-//     nodeValue: 'hello',
-//     children: []
-//   }
-// }
-
-const TEXT_ELEMENT = 'TEXT_ELEMENT';
-function createTextNode(text) {
-  return {
-    type: TEXT_ELEMENT,
-    props: {
-      nodeValue: text,
-      children: [],
-    },
-  };
-}
-
-// const el = {
-//   type: 'div',
-//   props: {
-//     id: 'app',
-//     children: [textEl],
+//     nodeValue: 'Hello World',
+//     children: [],
 //   },
 // };
 
-function createElement(type, props, ...children) {
-  return {
-    type,
-    props: {
-      ...props,
-      children: children.map(child => {
-        return typeof child === 'string' ? createTextNode(child) : child;
-      }),
-    },
-  };
-}
+// const vdom = {
+//   type: 'div',
+//   props: {
+//     id: 'app',
+//     children: [textEL],
+//   },
+// };
 
-function render(el, container) {
-  const dom =
-    el.type === TEXT_ELEMENT
-      ? document.createTextNode('')
-      : document.createElement(el.type);
+// const textEl = createTextNode('Hello Word');
 
-  Object.keys(el.props).forEach(key => {
-    if (key !== 'children') {
-      dom[key] = el.props[key];
-    }
-  });
-  const children = el.props.children;
-  children.forEach(child => {
-    render(child, dom);
-  });
-  container.append(dom);
-}
+import React from './core/React.js';
+import ReactDOM from './core/ReactDom.js';
 
-// const textEl = createTextNode('hello');
-const App = createElement('div', { id: 'app' }, 'hello', ' there');
+const App = React.createElement('div', { id: 'app' }, 'Hello Word', 'aa');
 
-// render(App, document.querySelector('#root'));
+console.log(App);
 
-const ReactDom = {
-  createRoot(container) {
-    return {
-      render(App) {
-        render(App, container)
-      },
-    };
-  },
-};
+ReactDOM.createRoot(document.querySelector('#root')).render(App);
 
-ReactDom.createRoot(document.querySelector('#root')).render(App)
-// const dom = document.createElement(App.type);
-// dom.id = App.props.id;
-// document.querySelector('#root').append(dom);
+// render(document.querySelector('#root'), App);
 
+// createRoot(document.querySelector('#root'), App);
+
+// document.querySelector('#root').innerHTML = `app`;
+
+// const div = document.createElement(App.type);
+// div.id = App.props.id;
+// document.querySelector('#root').append(div);
 // const textNode = document.createTextNode('');
 // textNode.nodeValue = textEl.props.nodeValue;
-// dom.append(textNode);
+// div.append(textNode);
+
+// root.append(div);
